@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bulb Control App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    header, footer {
+      width: 100%;
+      text-align: center;
+      padding: 1rem;
+    }
+    header {
+      background-color: #2563eb;
+      color: white;
+    }
+    footer {
+      background-color: #1e293b;
+      color: white;
+      margin-top: auto;
+    }
+    .container {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin: 1rem 0;
+      max-width: 400px;
+      width: 100%;
+    }
+    .container h2 {
+      font-size: 1.25rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    img {
+      width: 128px;
+      height: auto;
+      margin: 0 auto 1rem;
+      display: block;
+    }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    button {
+      padding: 0.5rem;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #1e40af;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.25rem;
+      margin-bottom: 1rem;
+    }
+    .click-count {
+      text-align: center;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <p id="header-time" class="text-lg font-medium">Header Time: Loading...</p>
+  </header>
+
+  <!-- Bulb Control -->
+  <div class="container">
+    <h2>Bulb Control</h2>
+    <img id="bulb-image" src="https://placehold.co/150x200/808080/FFFFFF?text=Bulb+OFF " alt="Bulb">
+    <div class="controls">
+      <!-- Radio Buttons -->
+      <div>
+        <label>
+          <input type="radio" name="bulb" value="on" onclick="setBulbState(true)"> ON
+        </label>
+        <label>
+          <input type="radio" name="bulb" value="off" onclick="setBulbState(false)"> OFF
+        </label>
+      </div>
+      <!-- Clickable Buttons -->
+      <div>
+        <button onclick="setBulbState(true)">Turn ON</button>
+        <button onclick="setBulbState(false)">Turn OFF</button>
+      </div>
+      <!-- Checkbox -->
+      <label>
+        <input type="checkbox" id="bulb-checkbox" onchange="toggleBulb()"> Toggle Bulb
+      </label>
+      <!-- Unified Toggle Button -->
+      <button onclick="toggleBulb()">Toggle Bulb State</button>
+      <!-- Interaction Counter -->
+      <p class="click-count">Button clicked: <span id="click-count">0</span> times</p>
+    </div>
+  </div>
+
+  <!-- User Input -->
+  <div class="container">
+    <h2>User Input</h2>
+    <input type="text" id="name-input" placeholder="Enter your name" oninput="updateName()">
+    <h1 id="name-h1">Guest</h1>
+    <p id="name-p">No name entered</p>
+    <div id="name-div">Empty</div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p id="footer-time" class="text-lg font-medium">Footer Time: Loading...</p>
+  </footer>
+
+  <script>
+    let bulbState = false; // false = OFF, true = ON
+    let clickCount = 0;
+
+    const bulbImage = document.getElementById('bulb-image');
+    const bulbCheckbox = document.getElementById('bulb-checkbox');
+    const clickCountDisplay = document.getElementById('click-count');
+    const headerTime = document.getElementById('header-time');
+    const footerTime = document.getElementById('footer-time');
+    const nameInput = document.getElementById('name-input');
+    const nameH1 = document.getElementById('name-h1');
+    const nameP = document.getElementById('name-p');
+    const nameDiv = document.getElementById('name-div');
+
+    function setBulbState(newState) {
+      bulbState = newState;
+      bulbImage.src = bulbState
+        ? 'https://placehold.co/150x200/FFFF00/000000?text=Bulb+ON '
+        : 'https://placehold.co/150x200/808080/FFFFFF?text=Bulb+OFF ';
+      bulbCheckbox.checked = bulbState;
+    }
+
+    function toggleBulb() {
+      setBulbState(!bulbState);
+      clickCount++;
+      clickCountDisplay.textContent = clickCount;
+    }
+
+    function updateName() {
+      const name = nameInput.value || 'Guest';
+      nameH1.textContent = name;
+      nameP.textContent = name === 'Guest' ? 'No name entered' : name;
+      nameDiv.textContent = name === 'Guest' ? 'Empty' : name;
+    }
+
+    function updateTime() {
+      const now = new Date();
+      const formattedTime = now.toLocaleTimeString();
+      const formattedDateTime = `${now.toLocaleDateString()} ${formattedTime}`;
+      headerTime.textContent = `Header Date & Time: ${formattedDateTime}`;
+      footerTime.textContent = `Footer Date & Time: ${formattedDateTime}`;
+    }
+
+    // Initialize time updates
+    setInterval(updateTime, 1000);
+    updateTime(); // Initial call to avoid delay
+  </script>
+</body>
+</html>
